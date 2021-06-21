@@ -2,28 +2,32 @@ docker_cleanup
 =========
 
 Diese Rolle installiert einen dcleaner.sh cronjob.  
-Dcleaner ist ein script, um alte oder ungenutzte container images zu löschen.
+Dcleaner ist ein Skript, um alte oder ungenutzte Container Images zu löschen.
 
 Requirements
 ------------
 
-Die docker-ce und die Docker CLI muss auf dem Zielsystem installiert sein.
+* docker-ce 
+* Docker CLI
+* Docker Rechte für Ansible User
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+    # Cronjob Trigger
+    cron_hour: 4
+    cron_minute: 0
+    cron_weekday: "*"
 
+    # DCleaner Parameter
+    cron_dcleaner_params: "old"
 
-Example Playbook
-----------------
+    # Pfad für die Installation
+    dcleaner_path: "/usr/local/bin"
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
+Für mehr Informationen über die dcleaner Parameter:  
+[dcleaner Skript](https://raw.githubusercontent.com/mahaupt/docker-cleanup/master/files/dcleaner.sh)
 
 Author Information
 ------------------

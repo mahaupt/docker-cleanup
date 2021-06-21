@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -o errexit
 
 if [ $# -eq 0 ] || [ "$1" = "help" ] || [ "$1" = "h" ]; then
     echo "Docker Cleaner v1.0"
@@ -25,8 +24,8 @@ function startTempContainers {
     do
         image="$1"
         shift
-        c=$(docker create $image)
-        container_temp_ids+=($c)
+        c=$(docker create "$image")
+        container_temp_ids+=("$c")
         # echo "create $c"
     done
 }
@@ -34,7 +33,7 @@ readonly -f startTempContainers
 
 ## Stops temporarily created containers
 function stopTempContainers {
-    for t in ${container_temp_ids[@]}; do
+    for t in "${container_temp_ids[@]}"; do
         s=$(docker rm $t)
         # echo "remove $t"
     done
@@ -44,7 +43,7 @@ readonly -f stopTempContainers
 # PRUNE
 if [ "$1" = "prune" ] || [ "$1" = "p" ]; then
     shift
-    startTempContainers $@
+    startTempContainers "$@"
     docker image prune --force
     stopTempContainers
     exit 0
@@ -53,7 +52,7 @@ fi
 # ALL
 if [ "$1" = "all" ] || [ "$1" = "a" ]; then
     shift
-    startTempContainers $@
+    startTempContainers "$@"
     docker image prune -a --force
     stopTempContainers
     exit 0
@@ -70,7 +69,7 @@ if [ "$1" = "old" ] || [ "$1" = "o" ]; then
         # echo "Minimum age: $until"
     fi
 
-    startTempContainers $@
+    startTempContainers "$@"
     docker image prune -a --force --filter "until=$until"
     stopTempContainers
     exit 0
