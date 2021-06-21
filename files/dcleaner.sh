@@ -34,7 +34,7 @@ readonly -f startTempContainers
 ## Stops temporarily created containers
 function stopTempContainers {
     for t in "${container_temp_ids[@]}"; do
-        s=$(docker rm $t)
+        docker rm $t
         # echo "remove $t"
     done
 }

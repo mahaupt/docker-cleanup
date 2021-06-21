@@ -23,6 +23,7 @@ jobs:
           VALIDATE_ALL_CODEBASE: true
           FILTER_REGEX_EXCLUDE: '.*.md'
           VALIDATE_JSCPD: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   sandbox:
     name: Sandbox Test
