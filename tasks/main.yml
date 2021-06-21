@@ -1,0 +1,32 @@
+---
+# tasks file for .
+
+- name: Make directory
+  file:
+    path: "{{ dcleaner_path }}"
+    state: directory
+
+- name: Check is docker installed
+  shell: command -v docker >/dev/null 2>&1
+  register: is_docker_exist
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+
+- name: "Upload script"
+  when: "is_docker_exist.rc == 0"
+  copy:
+    src: files/dcleaner.sh
+    dest: "{{ dcleaner_path }}/dcleaner"
+    owner: "{{ ansible_facts['user_id'] }}"
+    mode: 0755
+
+- name: "Install cronjob"
+  when: "is_docker_exist.rc == 0"
+  cron:
+    user: "{{ ansible_facts['user_id'] }}"
+    name: "dcleaner"
+    hour: "{{ cron_hour }}"
+    minute: "{{ cron_minute }}"
+    weekday: "{{ cron_weekday }}"
+    job: "{{ dcleaner_path }}/dcleaner {{ cron_dcleaner_params }}"

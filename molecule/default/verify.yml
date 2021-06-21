@@ -1,0 +1,48 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  vars_files:
+    - ../../defaults/main.yml
+  gather_facts: false
+  tasks:
+
+  - name: Get script states
+    stat:
+      path: "{{ dcleaner_path }}/dcleaner"
+    register: file_data
+
+  - name: Assert file exists
+    assert:
+      that: file_data.stat.exists
+
+  - name: Test script
+    command: "{{ dcleaner_path }}/dcleaner all"
+
+  - name: Pull test image
+    command: docker image pull alpine:latest
+
+  - name: Count docker images before
+    shell: "docker image ls -q | wc -l"
+    register: image_count_before
+
+  - name: "debg1"
+    debug:
+      var: image_count_before
+
+  - name: Sleep two minutes
+    pause: 
+      minutes: 3
+
+  - name: Count docker images after
+    shell: "docker image ls -q | wc -l"
+    register: image_count_after
+  
+  - name: "debg2"
+    debug:
+      var: image_count_after
+
+  - name: Check image removed
+    assert:
+      that: image_count_before.stdout != image_count_after.stdout

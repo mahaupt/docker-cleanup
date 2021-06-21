@@ -1,0 +1,29 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  vars_files:
+    - ../../defaults/main.yml
+  tasks:
+
+  - name: Get script states
+    stat:
+      path: "{{ dcleaner_path }}/dcleaner"
+    register: file_data
+    failed_when: file_data.stat.exists
+
+  - name: Assert cronjob not installed
+    cron:
+      user: "{{ ansible_facts['user_id'] }}"
+      name: "dcleaner"
+      hour: "{{ cron_hour }}"
+      minute: "{{ cron_minute }}"
+      weekday: "{{ cron_weekday }}"
+      job: "{{ dcleaner_path }}/dcleaner {{ cron_dcleaner_params }}"
+      state: absent
+    check_mode: yes
+    register: check_cronjob
+    failed_when: check_cronjob.changed
+
