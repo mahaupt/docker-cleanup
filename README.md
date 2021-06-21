@@ -1,3 +1,5 @@
+[![Lint and Test](https://github.com/mahaupt/docker-cleanup/actions/workflows/main.yml/badge.svg)](https://github.com/mahaupt/docker-cleanup/actions/workflows/main.yml)
+
 docker_cleanup
 =========
 
