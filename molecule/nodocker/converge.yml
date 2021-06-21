@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars:
+    cron_hour: 0
+    cron_minute: 0
+    cron_weekday: 0
+    cron_dcleaner_params: "old"
+
+  roles:
+    - docker_cleanup

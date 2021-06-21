@@ -1,0 +1,8 @@
+---
+- hosts: all
+  roles:
+    - role: docker_cleanup
+      vars:
+        cron_dcleaner_params: "all"
+        cron_hour: "{{ ansible_facts['date_time']['hour'] }}"
+        cron_minute: "{{ ansible_facts['date_time']['minute'] | int + 2 }}"

@@ -1,0 +1,8 @@
+---
+# defaults file for .
+
+cron_hour: 4
+cron_minute: 0
+cron_weekday: "*"
+cron_dcleaner_params: "old"
+dcleaner_path: "/usr/local/bin"
